@@ -130,3 +130,17 @@ print(cpu_usage)
 **Key takeaway:** Correct data types are important when writing automation that analyzes system metrics.
 
 **Note:** The CPU value is simulated for now, not a real measurement.
+
+## Learning Note 008 — Data Types and Numerical Comparisons
+
+**Objective:** Understand why numerical data types matter in Python automation.
+
+**Concepts:**
+- Integers (`int`) represent whole numbers.
+- Strings (`str`) represent text.
+- `85` is an integer; `"85"` is a string.
+- Numerical comparisons such as `85 > 80` evaluate to a Boolean (`True` or `False`).
+- Comparing a string directly with an integer using `>` raises a TypeError in Python 3.
+- `int("72")` converts a valid numeric string to an integer.
+
+**Key takeaway:** The data type, not the specific numerical value, determines whether a value can be used directly in numerical comparisons.
