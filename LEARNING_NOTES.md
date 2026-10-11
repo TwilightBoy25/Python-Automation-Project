@@ -164,5 +164,25 @@ print(cpu_usage)
 85 > 80  # True
 85 < 80  # False
 ```
+## Learning Note 010 — Python Conditional Statements
 
+**Objective:** Understand how Python makes decisions using `if` statements.
+
+**Concepts:**
+- `if` evaluates a condition.
+- When the condition is `True`, Python executes the indented block.
+- When the condition is `False`, Python skips that block.
+- A colon (`:`) begins the conditional block.
+- Indentation defines which statements belong to the block.
+- `>` and `>=` differ at the threshold boundary.
+
+**Example:**
+```python
+if cpu_usage > 80:
+    print("WARNING")
+```
+
+**Key takeaway:** Conditional statements allow monitoring scripts to react to system metrics rather than only display them.
+
+**Current project status:** CPU usage is simulated, not collected from the operating system.
 **Automation connection:** Comparison operators will allow our monitoring script to determine when CPU utilization exceeds a warning threshold.
