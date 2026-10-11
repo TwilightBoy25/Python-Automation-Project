@@ -1,4 +1,4 @@
-## Learning Note 001 — Linux Project Directories
+ ## Learning Note 001 — Linux Project Directories
 
 **Objective:** Create and navigate a project directory in Linux.
 
@@ -144,3 +144,25 @@ print(cpu_usage)
 - `int("72")` converts a valid numeric string to an integer.
 
 **Key takeaway:** The data type, not the specific numerical value, determines whether a value can be used directly in numerical comparisons.
+
+## Learning Note 009 — Comparison Operators and Boolean Values
+
+**Objective:** Understand how Python evaluates comparisons.
+
+**Concepts:**
+- Comparison operators compare values.
+- `>` greater than; `<` less than.
+- `>=` greater than or equal to; `<=` less than or equal to.
+- `==` equal to; `!=` not equal to.
+- Comparisons produce Boolean values: `True` or `False`.
+- `=` assigns a value, while `==` checks equality.
+- `python3` opens the interactive Python interpreter.
+- `exit()` returns to the Linux shell.
+
+**Practice:**
+```python
+85 > 80  # True
+85 < 80  # False
+```
+
+**Automation connection:** Comparison operators will allow our monitoring script to determine when CPU utilization exceeds a warning threshold.
