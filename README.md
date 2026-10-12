@@ -454,3 +454,79 @@ print("1-Minute Load Average:", load_average)
 **Engineering takeaway:** Clear labels improve the readability of operational output and help engineers identify measurements without guessing.
 
 **Project status:** Improving the presentation of real Linux system metrics.
+
+## Learning Note 030 — Displaying Multiple Arguments and Units
+
+**Objective:** Make simulated CPU output easier to interpret by adding a label and unit.
+
+**New code:**
+```python
+print("Simulated CPU Usage:", cpu_usage, "%")
+```
+
+**Concepts:**
+- Python's print() function accepts multiple arguments.
+- Commas separate arguments in the function call.
+- By default, print() inserts spaces between arguments.
+- Strings can describe metrics and their units.
+- Clearly identifying simulated measurements prevents confusion with real system data.
+
+**Expected output:**
+```text
+Simulated CPU Usage: 85 %
+```
+
+**Engineering takeaway:** Monitoring output should identify each metric, its unit, and whether the value is simulated or collected from the operating system.
+
+**Project status:** Improving the clarity of simulated and real monitoring data.
+
+## Learning Note 031 — Introduction to Python f-Strings
+
+**Objective:** Use formatted string literals to display variables inside readable monitoring output.
+
+**New code:**
+```python
+print(f"Simulated CPU Usage: {cpu_usage}%")
+```
+
+**Concepts:**
+- An f-string is a formatted string literal.
+- Prefixing a string with `f` enables interpolation.
+- Curly braces `{}` allow Python expressions or variables to be evaluated inside a string.
+- Unlike multiple print() arguments, f-strings let us control spacing precisely.
+- F-strings are useful for monitoring messages, logs, and automation output.
+
+**Expected output:**
+```text
+Simulated CPU Usage: 85%
+```
+
+**Engineering takeaway:** F-strings make it easier to construct clear, consistently formatted operational messages.
+
+**Project status:** Introducing formatted strings to improve monitoring output.
+
+## Learning Note 032 — Formatting Floating-Point Numbers
+
+**Objective:** Format Linux load-average measurements to two decimal places using Python f-strings.
+
+**New code:**
+```python
+print(f"1-Minute Load Average: {load_average:.2f}")
+```
+
+**Concepts:**
+- F-strings support formatting specifications inside curly braces.
+- `:` introduces the formatting specification.
+- `.2f` displays a number with two digits after the decimal point.
+- Formatting changes the displayed representation, not the original variable value.
+- Consistent numerical formatting improves the readability of monitoring output.
+
+**Example:**
+```text
+Original value: 0.30859375
+Formatted output: 0.31
+```
+
+**Engineering takeaway:** Monitoring tools should display measurements with useful precision while retaining the original data for calculations.
+
+**Project status:** Improving the presentation of real Linux load-average measurements.
