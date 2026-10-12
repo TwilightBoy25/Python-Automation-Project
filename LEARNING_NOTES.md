@@ -287,3 +287,101 @@ else:
 **Key takeaway:** Boundary testing helps verify that monitoring and alerting logic behaves correctly at threshold values.
 
 **Note:** CPU usage is simulated; real system metrics will be introduced later.
+
+## Learning Note 016 — Configurable Thresholds
+
+**Objective:** Learn to store monitoring thresholds in variables instead of hardcoding them inside conditions.
+
+**Concepts:**
+- A hardcoded value is written directly into program logic.
+- Variables make configuration easier to change and understand.
+- `cpu_threshold = 80` stores the warning threshold.
+- `cpu_usage > cpu_threshold` compares two integer values.
+- Separating configuration from decision-making logic improves maintainability.
+
+**Example:**
+```python
+cpu_usage = 80
+cpu_threshold = 80
+
+if cpu_usage > cpu_threshold:
+    print("WARNING")
+else:
+    print("HEALTHY")
+```
+
+**Key takeaway:** Configurable thresholds make automation scripts easier to maintain and adapt.
+
+**Current project status:** CPU values remain simulated; real system metrics are a future milestone.
+
+## Learning Note 017 — Verifying Configurable Thresholds
+
+**Objective:** Verify that replacing a hardcoded threshold with a variable preserves program behavior.
+
+**Concepts:**
+- Configuration values can be stored in variables.
+- `cpu_threshold = 80` defines the warning threshold.
+- `cpu_usage > cpu_threshold` compares two integer values.
+- Changing how code is structured should not unintentionally change its behavior.
+- Testing after code changes helps detect regressions.
+
+**Test case:**
+- CPU usage: 80
+- CPU threshold: 80
+- Comparison: 80 > 80 → False
+- Expected result: HEALTHY
+
+**Key takeaway:** Verify that code improvements preserve the expected behavior before adding more features.
+
+**Project status:** CPU utilization remains simulated.
+
+## Learning Note 018 — Testing Configuration Changes
+
+**Objective:** Verify that changing a configurable threshold changes the monitoring decision.
+
+**Concepts:**
+- Configuration values control how a program behaves.
+- `cpu_usage` represents simulated CPU utilization.
+- `cpu_threshold` defines the warning threshold.
+- Changing a threshold does not require rewriting the conditional logic.
+- Testing one change at a time makes troubleshooting easier.
+
+**Test case:**
+```python
+cpu_usage = 80
+cpu_threshold = 70
+```
+
+**Expected comparison:** `80 > 70` → `True`
+
+**Expected status:** `WARNING`
+
+**Key takeaway:** Separating configuration from logic allows a monitoring script to adapt to changing operational requirements.
+
+**Project status:** CPU values remain simulated; real Linux metrics will be introduced later.
+
+## Learning Note 019 — Introduction to the Linux /proc Filesystem
+
+**Objective:** Discover how Linux exposes real system statistics.
+
+**Concepts:**
+- `/proc` is a virtual filesystem that exposes kernel and process information.
+- `/proc/stat` provides CPU activity counters.
+- `/proc/meminfo` provides memory statistics.
+- `/proc/uptime` provides system uptime.
+- The kernel generates these values dynamically.
+- CPU counters in `/proc/stat` are cumulative time measurements, not CPU usage percentages.
+
+**Command:**
+```bash
+head -n 5 /proc/stat
+```
+
+**Command breakdown:**
+- `head`: Displays the beginning of a file.
+- `-n 5`: Displays five lines.
+- `/proc/stat`: Source of kernel CPU statistics.
+
+**Key takeaway:** Linux system-monitoring programs can obtain real measurements from kernel-provided interfaces instead of relying on simulated values.
+
+**Project status:** Exploring real system data; monitor.py has not yet been modified to read it.
