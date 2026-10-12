@@ -186,3 +186,104 @@ if cpu_usage > 80:
 
 **Current project status:** CPU usage is simulated, not collected from the operating system.
 **Automation connection:** Comparison operators will allow our monitoring script to determine when CPU utilization exceeds a warning threshold.
+
+## Learning Note 011 — Testing Conditional Logic
+
+**Objective:** Verify how Python executes an `if` statement.
+
+**Concepts:**
+- `cpu_usage` stores the simulated CPU utilization value.
+- `80` is the warning threshold.
+- `85 > 80` evaluates to `True`.
+- `75 > 80` evaluates to `False`.
+- Python executes an `if` block only when its condition is true.
+- Statements outside the `if` block execute normally.
+
+**Expected output with cpu_usage = 85:**
+```text
+Linux Server Health Monitor
+RHEL-10
+85
+WARNING
+```
+
+**Key takeaway:** Testing code verifies that the program behaves as predicted. Later, we will test values above, below, and exactly at the threshold.
+
+## Learning Note 012 — Python if/else Statements
+
+**Objective:** Understand how Python handles true and false conditions.
+
+**Concepts:**
+- `if` evaluates a condition.
+- When the condition is True, Python executes the `if` block.
+- When the condition is False, Python executes the `else` block.
+- `else` does not require a condition.
+- Indentation defines which statements belong to each block.
+
+**Example:**
+```python
+if cpu_usage > 80:
+    print("WARNING")
+else:
+    print("HEALTHY")
+```
+
+**Key takeaway:** if/else statements allow our Linux monitoring script to choose between two outcomes.
+
+**Note:** CPU utilization is simulated for now.
+
+## Learning Note 013 — Verifying if/else Control Flow
+
+**Objective:** Verify that Python executes the correct conditional branch.
+
+**Concepts:**
+- Control flow determines which instructions execute.
+- `if/else` provides two mutually exclusive execution paths.
+- A condition evaluates to a Boolean value (`True` or `False`).
+- If the condition is `True`, Python executes the `if` block.
+- If the condition is `False`, Python executes the `else` block.
+
+**Test case:**
+- `cpu_usage = 85`
+- Condition: `85 > 80`
+- Expected result: `WARNING`
+
+**Key takeaway:** Running a script and comparing actual output to expected output is an essential software testing practice.
+
+## Learning Note 014 — Testing Both Conditional Branches
+
+**Objective:** Verify the False branch of an if/else statement.
+
+**Concepts:**
+- An if/else statement has two possible execution paths.
+- Testing both branches helps verify program behavior.
+- When cpu_usage = 85, the condition 85 > 80 is True and prints WARNING.
+- When cpu_usage = 60, the condition 60 > 80 is False and prints HEALTHY.
+- Change one variable at a time when testing to isolate the cause of different results.
+
+**Test cases:**
+- CPU 85 → WARNING (verified)
+- CPU 60 → HEALTHY (pending verification)
+
+**Key takeaway:** Testing both True and False outcomes is a basic software engineering practice.
+
+**Note:** CPU utilization is simulated, not collected from the actual Linux system.
+
+## Learning Note 015 — Boundary Testing
+
+**Objective:** Understand why software engineers test values at the exact threshold.
+
+**Concepts:**
+- Boundary testing checks behavior at or near a condition's threshold.
+- The `>` operator means strictly greater than.
+- The `>=` operator means greater than or equal to.
+- Testing values below, at, and above a threshold helps detect logic errors.
+
+**Current test cases:**
+- cpu_usage = 60 → HEALTHY (verified)
+- cpu_usage = 85 → WARNING (verified)
+- cpu_usage = 80 → Pending
+
+**Key takeaway:** Boundary testing helps verify that monitoring and alerting logic behaves correctly at threshold values.
+
+**Note:** CPU usage is simulated; real system metrics will be introduced later.
