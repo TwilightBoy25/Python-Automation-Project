@@ -385,3 +385,48 @@ head -n 5 /proc/stat
 **Key takeaway:** Linux system-monitoring programs can obtain real measurements from kernel-provided interfaces instead of relying on simulated values.
 
 **Project status:** Exploring real system data; monitor.py has not yet been modified to read it.
+
+## Learning Note 020 — Exploring Linux Memory Statistics
+
+**Objective:** Learn how Linux exposes real memory statistics through /proc/meminfo.
+
+**Command:**
+```bash
+head -n 5 /proc/meminfo
+```
+
+**Concepts:**
+- /proc/meminfo is a kernel-provided interface for memory statistics.
+- MemTotal: Total usable physical memory.
+- MemFree: Memory currently unused.
+- MemAvailable: Estimated memory available for applications without swapping.
+- Buffers: Memory used for certain kernel buffers.
+- Cached: Memory used for the page cache.
+- Linux can reclaim some cached memory when applications need it.
+
+**Engineering takeaway:** MemAvailable is often a better indicator of usable memory than MemFree alone.
+
+**Project status:** Exploring real Linux system metrics. No changes to monitor.py yet.
+
+## Learning Note 021 — Inspecting Disk Utilization
+
+**Objective:** Learn how to inspect filesystem storage usage in Linux.
+
+**Command:**
+```bash
+df -h /
+```
+
+**Concepts:**
+- `df` reports filesystem space usage.
+- `-h` displays human-readable storage units.
+- `/` selects the filesystem containing the root directory.
+- `Size` represents total filesystem capacity.
+- `Used` represents occupied filesystem space.
+- `Avail` represents space available to unprivileged users.
+- `Use%` reports filesystem utilization as a percentage.
+- `Mounted on` identifies the mount point.
+
+**Engineering takeaway:** Disk utilization is an important system-health metric because full filesystems can prevent applications from writing logs, creating files, or completing operations.
+
+**Project status:** Exploring real CPU, memory, and disk statistics before integrating them into Python.
