@@ -862,3 +862,23 @@ else:
 
 **Project status:** Completing simulated CPU threshold boundary tests before adding real metric-based alerting.
 
+## Learning Note 038 — Understanding CPU Count and Load Average
+
+**Objective:** Determine how many logical CPUs are available to our RHEL 10 VM so we can interpret Linux load averages.
+
+**Command:**
+```bash
+nproc
+```
+
+**Concepts:**
+- `nproc` reports the number of processing units available to the current process.
+- Linux load average is not a CPU utilization percentage.
+- Load average reflects runnable tasks and tasks in uninterruptible sleep.
+- CPU count provides context when interpreting load averages.
+- A load average near the available CPU count can indicate substantial demand, especially for CPU-bound workloads.
+- Load average alone does not distinguish CPU contention from I/O-related waiting.
+
+**Engineering takeaway:** Monitoring thresholds should account for the system's resources rather than relying on arbitrary numbers.
+
+**Project status:** Investigating logical CPU count before implementing real load-average alerts.
