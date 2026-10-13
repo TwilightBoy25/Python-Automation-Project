@@ -430,3 +430,291 @@ df -h /
 **Engineering takeaway:** Disk utilization is an important system-health metric because full filesystems can prevent applications from writing logs, creating files, or completing operations.
 
 **Project status:** Exploring real CPU, memory, and disk statistics before integrating them into Python.
+
+## Learning Note 022 — Introduction to Python's os Module
+
+**Objective:** Learn how Python can retrieve information from the Linux operating system.
+
+**Command:**
+```bash
+python3 -c "import os; print(os.getloadavg())"
+```
+
+**Concepts:**
+- A Python module contains reusable functions and other definitions.
+- `import os` makes operating-system functionality available to Python.
+- `python3 -c` executes Python code directly from the terminal.
+- `os.getloadavg()` returns the system's 1-minute, 5-minute, and 15-minute load averages.
+- The three results are returned as a tuple.
+- Load average is not the same as CPU utilization percentage.
+
+**Engineering takeaway:** Python can interact with operating-system interfaces to collect real monitoring information.
+
+**Project status:** Beginning Python-based system metric collection. monitor.py remains unchanged.
+
+## Learning Note 023 — Tuple Indexing in Python
+
+**Objective:** Learn to retrieve individual values from a tuple.
+
+**Command:**
+```bash
+python3 -c "import os; print(os.getloadavg()[0])"
+```
+
+**Concepts:**
+- A tuple is an ordered collection of values.
+- Python uses zero-based indexing.
+- Index [0] accesses the first element.
+- Index [1] accesses the second element.
+- Index [2] accesses the third element.
+- os.getloadavg() returns a tuple containing the 1-minute, 5-minute, and 15-minute system load averages.
+
+**Examples:**
+```python
+os.getloadavg()[0]  # 1-minute load average
+os.getloadavg()[1]  # 5-minute load average
+os.getloadavg()[2]  # 15-minute load average
+```
+
+**Engineering takeaway:** Indexing allows monitoring scripts to extract specific measurements from collections of system data.
+
+**Project status:** Practicing metric extraction before integrating real measurements into monitor.py.
+
+## Learning Note 024 — Storing System Metrics in Variables
+
+**Objective:** Learn to assign real Linux system measurements to Python variables.
+
+**Command:**
+```bash
+python3 -c "import os; load_average = os.getloadavg()[0]; print(load_average)"
+```
+
+**Concepts:**
+- The assignment operator (`=`) stores a value in a variable.
+- `os.getloadavg()` retrieves three system load averages.
+- `[0]` selects the 1-minute load average.
+- `load_average` stores the selected measurement.
+- `print(load_average)` displays the stored value.
+- Variables allow measurements to be reused in calculations and conditional statements.
+
+**Example:**
+```python
+import os
+
+load_average = os.getloadavg()[0]
+print(load_average)
+```
+
+**Engineering takeaway:** Collecting a system metric and storing it in a variable allows automation scripts to evaluate, process, and report that measurement.
+
+**Important:** System load average is not equivalent to CPU utilization percentage.
+
+**Project status:** Practicing real metric collection before integrating it into monitor.py.
+
+## Learning Note 025 — Integrating OS Metrics into Python
+
+**Objective:** Add real Linux system data collection to monitor.py.
+
+**New code:**
+```python
+import os
+
+load_average = os.getloadavg()[0]
+```
+
+**Concepts:**
+- Imports are conventionally placed at the beginning of Python files.
+- `os.getloadavg()[0]` retrieves the 1-minute system load average.
+- Assigning the result to `load_average` stores a snapshot of the measurement.
+- Variables do not automatically update when the operating system changes.
+- Python executes statements in order.
+- `cpu_usage` remains a simulated percentage and must not be confused with load average.
+
+**Engineering takeaway:** Integrating OS functions into a Python script allows us to begin collecting real infrastructure metrics.
+
+**Checkpoint:** Add the import and assignment, save monitor.py, and predict whether the existing output will change. Do not execute yet.
+
+## Learning Note 026 — Regression Testing After Integration
+
+**Objective:** Verify that adding real system metric collection does not break existing monitoring logic.
+
+**Command:**
+```bash
+python3 monitor.py
+```
+
+**Expected output:**
+```text
+Linux Server Health Monitor
+RHEL-10
+80
+WARNING
+```
+
+**Concepts:**
+- Regression testing checks whether existing functionality still works after code changes.
+- `import os` does not print output by itself.
+- `load_average = os.getloadavg()[0]` retrieves and stores a measurement without displaying it.
+- Existing print statements determine what appears in the terminal.
+- Testing changes incrementally helps isolate bugs.
+
+**Engineering takeaway:** After introducing a new dependency or feature, verify that previously working functionality remains intact.
+
+**Project status:** Real system load collection has been added; execution verification is pending.
+
+## Learning Note 027 — Source Code Inspection
+
+**Objective:** Verify the current source code before making further changes.
+
+**Command:**
+```bash
+cat monitor.py
+```
+
+**Concepts:**
+- `cat` displays the contents of a file.
+- Source code inspection helps identify unexpected configuration values.
+- Program output should be evaluated against the code that actually executed.
+- Regression testing checks both successful execution and expected behavior.
+- Troubleshooting should begin with evidence rather than assumptions.
+
+**Observation:**
+- Checkpoint 26 displayed CPU usage of 85.
+- Our previous documented value was 80.
+- We need to inspect monitor.py to identify its current configuration.
+
+**Engineering takeaway:** Verify the actual system state before modifying code or troubleshooting unexpected behavior.
+
+**Project status:** Confirming the script's current configuration before adding a new feature.
+
+## Learning Note 028 — Displaying Real System Metrics
+
+**Objective:** Display the real Linux load average collected by Python.
+
+**New code:**
+```python
+print(load_average)
+```
+
+**Concepts:**
+- `os.getloadavg()[0]` retrieves the 1-minute load average.
+- `load_average` stores a snapshot of that measurement.
+- `print(load_average)` displays the stored value.
+- `cpu_usage` remains a simulated CPU percentage.
+- Load average is not equivalent to CPU utilization percentage.
+- The existing warning condition still evaluates `cpu_usage > cpu_threshold`.
+
+**Expected output structure:**
+```text
+Linux Server Health Monitor
+RHEL-10
+85
+<real load average>
+WARNING
+```
+
+**Engineering takeaway:** Monitoring software separates metric collection, data presentation, and alert evaluation.
+
+**Project status:** Displaying our first real Linux system measurement inside monitor.py.
+
+## Learning Note 029 — Labeled Monitoring Output
+
+**Objective:** Improve the readability of Linux monitoring output using Python's print() function.
+
+**New code:**
+```python
+print("1-Minute Load Average:", load_average)
+```
+
+**Concepts:**
+- `print()` accepts multiple arguments separated by commas.
+- A string can be used as a label to describe a measurement.
+- Python separates print arguments with a space by default.
+- `load_average` contains a real Linux system load measurement.
+- Labeled output makes monitoring results easier to interpret and troubleshoot.
+
+**Example output:**
+```text
+1-Minute Load Average: 0.24
+```
+
+**Engineering takeaway:** Clear labels improve the readability of operational output and help engineers identify measurements without guessing.
+
+**Project status:** Improving the presentation of real Linux system metrics.
+
+## Learning Note 030 — Displaying Multiple Arguments and Units
+
+**Objective:** Make simulated CPU output easier to interpret by adding a label and unit.
+
+**New code:**
+```python
+print("Simulated CPU Usage:", cpu_usage, "%")
+```
+
+**Concepts:**
+- Python's print() function accepts multiple arguments.
+- Commas separate arguments in the function call.
+- By default, print() inserts spaces between arguments.
+- Strings can describe metrics and their units.
+- Clearly identifying simulated measurements prevents confusion with real system data.
+
+**Expected output:**
+```text
+Simulated CPU Usage: 85 %
+```
+
+**Engineering takeaway:** Monitoring output should identify each metric, its unit, and whether the value is simulated or collected from the operating system.
+
+**Project status:** Improving the clarity of simulated and real monitoring data.
+
+## Learning Note 031 — Introduction to Python f-Strings
+
+**Objective:** Use formatted string literals to display variables inside readable monitoring output.
+
+**New code:**
+```python
+print(f"Simulated CPU Usage: {cpu_usage}%")
+```
+
+**Concepts:**
+- An f-string is a formatted string literal.
+- Prefixing a string with `f` enables interpolation.
+- Curly braces `{}` allow Python expressions or variables to be evaluated inside a string.
+- Unlike multiple print() arguments, f-strings let us control spacing precisely.
+- F-strings are useful for monitoring messages, logs, and automation output.
+
+**Expected output:**
+```text
+Simulated CPU Usage: 85%
+```
+
+**Engineering takeaway:** F-strings make it easier to construct clear, consistently formatted operational messages.
+
+**Project status:** Introducing formatted strings to improve monitoring output.
+
+## Learning Note 032 — Formatting Floating-Point Numbers
+
+**Objective:** Format Linux load-average measurements to two decimal places using Python f-strings.
+
+**New code:**
+```python
+print(f"1-Minute Load Average: {load_average:.2f}")
+```
+
+**Concepts:**
+- F-strings support formatting specifications inside curly braces.
+- `:` introduces the formatting specification.
+- `.2f` displays a number with two digits after the decimal point.
+- Formatting changes the displayed representation, not the original variable value.
+- Consistent numerical formatting improves the readability of monitoring output.
+
+**Example:**
+```text
+Original value: 0.30859375
+Formatted output: 0.31
+```
+
+**Engineering takeaway:** Monitoring tools should display measurements with useful precision while retaining the original data for calculations.
+
+**Project status:** Improving the presentation of real Linux load-average measurements.
+
