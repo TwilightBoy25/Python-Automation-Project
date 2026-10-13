@@ -831,3 +831,34 @@ else:
 
 **Project status:** Testing inclusive alert behavior with equal simulated CPU usage and threshold values.
 
+## Learning Note 037 — Testing Below an Inclusive Threshold
+
+**Objective:** Verify that simulated CPU usage below the configured threshold produces a healthy status.
+
+**Test configuration:**
+```python
+cpu_usage = 69
+cpu_threshold = 70
+```
+
+**Condition:**
+```python
+if cpu_usage >= cpu_threshold:
+    print("WARNING")
+else:
+    print("HEALTHY")
+```
+
+**Expected status:** HEALTHY
+
+**Concepts:**
+- `>=` evaluates to False when the left operand is smaller than the right operand.
+- The `else` branch executes when the `if` condition is False.
+- Boundary testing should cover values below, equal to, and above a threshold.
+- Changing one variable at a time helps isolate the behavior being tested.
+- Real Linux load average remains independent of the simulated CPU warning.
+
+**Engineering takeaway:** A monitoring system must distinguish healthy measurements from values that meet or exceed an alert threshold.
+
+**Project status:** Completing simulated CPU threshold boundary tests before adding real metric-based alerting.
+
