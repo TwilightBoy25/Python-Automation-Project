@@ -718,3 +718,116 @@ Formatted output: 0.31
 
 **Project status:** Improving the presentation of real Linux load-average measurements.
 
+## Learning Note 033 — Comparison Operators and Threshold Boundaries
+
+**Objective:** Understand how Python evaluates conditions at an exact monitoring threshold.
+
+**Example:**
+```python
+cpu_usage = 70
+cpu_threshold = 70
+
+if cpu_usage > cpu_threshold:
+    print("WARNING")
+else:
+    print("HEALTHY")
+```
+
+**Concepts:**
+- `>` means strictly greater than.
+- `>=` means greater than or equal to.
+- An `if` statement evaluates a Boolean condition.
+- The `else` branch runs when the `if` condition is False.
+- Boundary testing verifies behavior when a metric equals its configured threshold.
+
+**Engineering takeaway:** Alerting logic must clearly define whether a threshold is inclusive or exclusive.
+
+**Project status:** Reviewing threshold boundaries before introducing real Linux health checks.
+
+## Learning Note 034 — Inclusive vs. Exclusive Thresholds
+
+**Objective:** Understand how inclusive thresholds affect monitoring alerts.
+
+**Comparison operators:**
+```python
+cpu_usage > cpu_threshold
+cpu_usage >= cpu_threshold
+```
+
+**Concepts:**
+- `>` means strictly greater than.
+- `>=` means greater than or equal to.
+- An exclusive threshold does not trigger at the exact threshold value.
+- An inclusive threshold triggers when the measured value equals or exceeds the threshold.
+- Monitoring policies determine which comparison operator is appropriate.
+
+**Example:**
+```python
+cpu_usage = 70
+cpu_threshold = 70
+
+if cpu_usage >= cpu_threshold:
+    print("WARNING")
+else:
+    print("HEALTHY")
+```
+
+**Engineering takeaway:** Choose comparison operators based on the intended alerting policy, especially at threshold boundaries.
+
+**Project status:** Practicing inclusive threshold logic before introducing real system alerts.
+
+## Learning Note 035 — Implementing Inclusive CPU Thresholds
+
+**Objective:** Update the simulated CPU alert condition to use an inclusive threshold.
+
+**Previous code:**
+```python
+if cpu_usage > cpu_threshold:
+```
+
+**Updated code:**
+```python
+if cpu_usage >= cpu_threshold:
+```
+
+**Concepts:**
+- `>` triggers only when the measured value exceeds the threshold.
+- `>=` triggers when the measured value equals or exceeds the threshold.
+- With cpu_usage = 85 and cpu_threshold = 70, both operators evaluate to True.
+- Changing a comparison operator may affect boundary behavior without changing the current output.
+- Testing after a small code change helps verify existing functionality.
+
+**Engineering takeaway:** Monitoring thresholds should match the exact alerting policy, including whether the boundary is inclusive.
+
+**Project status:** Implementing inclusive threshold logic in monitor.py.
+
+## Learning Note 036 — Boundary Testing an Inclusive Threshold
+
+**Objective:** Verify that an inclusive CPU threshold triggers at the exact boundary.
+
+**Test configuration:**
+```python
+cpu_usage = 70
+cpu_threshold = 70
+```
+
+**Condition:**
+```python
+if cpu_usage >= cpu_threshold:
+    print("WARNING")
+else:
+    print("HEALTHY")
+```
+
+**Expected status:** WARNING
+
+**Concepts:**
+- Boundary testing checks behavior at the exact threshold.
+- `>=` evaluates to True when both operands are equal.
+- Changing one variable at a time makes test results easier to interpret.
+- The load average remains a real system measurement, separate from simulated CPU usage.
+
+**Engineering takeaway:** Monitoring systems need tests at threshold boundaries to confirm that alerts follow the intended policy.
+
+**Project status:** Testing inclusive alert behavior with equal simulated CPU usage and threshold values.
+
