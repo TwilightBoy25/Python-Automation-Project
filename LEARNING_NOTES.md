@@ -882,3 +882,97 @@ nproc
 **Engineering takeaway:** Monitoring thresholds should account for the system's resources rather than relying on arbitrary numbers.
 
 **Project status:** Investigating logical CPU count before implementing real load-average alerts.
+
+## Learning Note 039 — Normalizing Linux Load Average
+
+**Objective:** Understand how to normalize Linux load average using the number of available logical CPUs.
+
+**Command:**
+```bash
+python3 -c "print(4.0 / 8)"
+```
+
+**Formula:**
+Normalized Load = Load Average / Available CPUs
+
+**Concepts:**
+- Python uses `/` for division.
+- `nproc` reported 8 available processing units on our RHEL 10 VM.
+- Normalized load expresses system load relative to available CPU count.
+- A normalized load of 1.0 means the load average equals the available CPU count.
+- Normalized load is not the same as CPU utilization percentage.
+- Linux load average can include runnable and uninterruptible sleeping tasks.
+
+**Engineering takeaway:** Normalizing load helps compare systems with different CPU capacities, but load must still be interpreted alongside other metrics.
+
+**Project status:** Learning normalized load calculations before implementing real Linux load-average alerts.
+
+## Learning Note 040 — Load Average vs. CPU Utilization
+
+**Objective:** Distinguish normalized Linux load average from actual CPU utilization.
+
+**Formula:**
+Normalized Load = Load Average / Available Logical CPUs
+
+**Example:**
+- Available CPUs: 8
+- Load average: 8.00
+- Normalized load: 1.00
+
+**Concepts:**
+- Normalized load expresses system load relative to available CPU count.
+- Linux load average includes runnable tasks and tasks in uninterruptible sleep.
+- Tasks waiting for I/O may contribute to load without consuming much CPU time.
+- CPU utilization measures the proportion of CPU execution time being used.
+- A normalized load of 1.00 does not necessarily indicate 100% CPU utilization.
+
+**Engineering takeaway:** Never treat normalized load as a direct CPU utilization percentage. Interpret load alongside CPU and I/O metrics.
+
+**Project status:** Strengthening understanding of real Linux measurements before adding load-based alerting.
+
+## Learning Note 041 — Retrieving Logical CPU Count with Python
+
+**Objective:** Retrieve the system's logical CPU count using Python's os module.
+
+**Command:**
+```bash
+python3 -c "import os; print(os.cpu_count())"
+```
+
+**Concepts:**
+- `import os` makes Python's operating-system utilities available.
+- `os.cpu_count()` returns the system's logical CPU count, or None if unavailable.
+- `nproc` reports processing units available to the current process.
+- These counts may differ when CPU affinity or resource restrictions apply.
+- CPU count helps provide context for Linux load-average measurements.
+
+**Engineering takeaway:** Test operating-system functions independently before integrating them into monitoring scripts.
+
+**Project status:** Learning to retrieve CPU information programmatically before implementing normalized load calculations.
+
+## Learning Note 042 — Storing Logical CPU Count
+
+**Objective:** Integrate logical CPU discovery into the existing Linux Server Health Monitor.
+
+**Code added:**
+```python
+cpu_count = os.cpu_count()
+```
+
+**Existing code:**
+```python
+load_average = os.getloadavg()[0]
+cpu_count = os.cpu_count()
+```
+
+**Concepts:**
+- `os.cpu_count()` retrieves the system's logical CPU count, or None if unavailable.
+- Assignment (`=`) stores the returned value in a variable.
+- Assigning a variable does not automatically print it.
+- The `cpu_count` variable can later help normalize the Linux load average.
+- CPU count is not the same as CPU utilization.
+
+**Engineering takeaway:** Collect system information programmatically and verify that small changes do not unexpectedly alter existing script behavior.
+
+**Project status:** Added CPU-count discovery in preparation for normalized load calculations.
+
