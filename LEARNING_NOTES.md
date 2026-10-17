@@ -1104,3 +1104,63 @@ python3 -c "print(0.5 >= 1.0)"
 **Engineering takeaway:** Monitoring alerts depend on comparing measured values against clearly defined thresholds.
 
 **Project status:** Practicing normalized-load comparisons before integrating real load-based alerting into monitor.py.
+
+## Learning Note 048 — Implementing a Real Load-Based Alert
+
+**Objective:** Add a monitoring condition based on real Linux normalized load.
+
+**Code added:**
+```python
+if normalized_load >= load_threshold:
+    print("LOAD WARNING")
+else:
+    print("LOAD HEALTHY")
+```
+
+**Existing values:**
+```python
+load_average = os.getloadavg()[0]
+cpu_count = os.cpu_count()
+normalized_load = load_average / cpu_count
+load_threshold = 1.0
+```
+
+**Concepts:**
+- `if` evaluates a Boolean condition.
+- `>=` checks whether a measurement meets or exceeds a threshold.
+- `else` executes when the condition is False.
+- Real Linux load measurements can drive monitoring decisions.
+- The simulated CPU alert and real load alert are separate checks.
+- Normalized load is not equivalent to CPU utilization percentage.
+
+**Engineering takeaway:** A monitoring system can collect real operating-system metrics, compare them against configurable thresholds, and report their status.
+
+**Project status:** Implementing the first real load-based alert alongside the existing simulated CPU alert.
+
+## Learning Note 049 — Testing the Load Warning Branch
+
+**Objective:** Verify that the real Linux load alert correctly enters its warning branch.
+
+**Temporary test configuration:**
+```python
+load_threshold = 0.0
+```
+
+**Existing condition:**
+```python
+if normalized_load >= load_threshold:
+    print("LOAD WARNING")
+else:
+    print("LOAD HEALTHY")
+```
+
+**Concepts:**
+- Monitoring conditions should be tested for both healthy and warning outcomes.
+- `>=` evaluates to True when the left value is greater than or equal to the threshold.
+- Temporarily adjusting a threshold allows controlled testing without generating actual system load.
+- A threshold of 0.0 is for testing only, not production use.
+- The simulated CPU alert and real load alert are independent conditions.
+
+**Engineering takeaway:** Verify alerting behavior through controlled tests rather than assuming a condition works.
+
+**Project status:** Testing the real load-warning branch before restoring the configured threshold.
