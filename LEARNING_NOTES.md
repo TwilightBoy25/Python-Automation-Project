@@ -976,3 +976,131 @@ cpu_count = os.cpu_count()
 
 **Project status:** Added CPU-count discovery in preparation for normalized load calculations.
 
+## Learning Note 043 — Displaying Logical CPU Count
+
+**Objective:** Display the logical CPU count collected by our Python monitoring script.
+
+**Existing variable:**
+```python
+cpu_count = os.cpu_count()
+```
+
+**Code added:**
+```python
+print(f"Logical CPUs: {cpu_count}")
+```
+
+**Concepts:**
+- Variable assignment stores a value without automatically displaying it.
+- `print()` displays information in the terminal.
+- F-strings insert variable values directly into formatted strings.
+- `os.cpu_count()` reports the system's logical CPU count, or None if unavailable.
+- Logical CPU count provides context for interpreting Linux load average.
+
+**Engineering takeaway:** Monitoring tools should present collected system information with descriptive labels so the output is easy to interpret.
+
+**Project status:** Displaying system CPU count before implementing normalized load calculations.
+
+
+## Learning Note 044 — Calculating Normalized Load
+
+**Objective:** Calculate normalized Linux load average using real system measurements.
+
+**Code added:**
+```python
+normalized_load = load_average / cpu_count
+```
+
+**Existing variables:**
+```python
+load_average = os.getloadavg()[0]
+cpu_count = os.cpu_count()
+```
+
+**Formula:**
+Normalized Load = 1-Minute Load Average / Logical CPU Count
+
+**Concepts:**
+- `/` is Python's division operator.
+- Variables can be used in mathematical expressions.
+- Assignment stores the result of a calculation.
+- A calculation does not automatically produce terminal output.
+- Normalized load expresses Linux system load relative to the CPU count.
+- Normalized load is not equivalent to CPU utilization percentage.
+- Division requires a valid, nonzero CPU count.
+
+**Engineering takeaway:** Combining real operating-system measurements allows monitoring logic to adapt to different machines rather than relying on hardcoded values.
+
+**Project status:** Implementing normalized load calculations before displaying the result and designing load-based alerts.
+
+## Learning Note 045 — Displaying Normalized Load
+
+**Objective:** Display the calculated normalized Linux load average using an f-string.
+
+**Existing calculation:**
+```python
+normalized_load = load_average / cpu_count
+```
+
+**Code added:**
+```python
+print(f"Normalized Load: {normalized_load:.4f}")
+```
+
+**Concepts:**
+- Normalized load is calculated by dividing load average by logical CPU count.
+- `:.4f` formats a floating-point value to four decimal places.
+- Formatting rounds the displayed value without changing the stored variable.
+- F-strings can display both variables and formatted numerical expressions.
+- Normalized load is not CPU utilization percentage.
+
+**Engineering takeaway:** Clear labels and consistent numerical formatting make monitoring output easier to interpret.
+
+**Project status:** Displaying normalized Linux load before implementing resource-aware alert thresholds.
+
+## Learning Note 046 — Defining a Normalized Load Threshold
+
+**Objective:** Define a configurable threshold for normalized Linux load average.
+
+**Code added:**
+```python
+load_threshold = 1.0
+```
+
+**Existing calculation:**
+```python
+normalized_load = load_average / cpu_count
+```
+
+**Concepts:**
+- A threshold is a reference value used to evaluate a measurement.
+- Storing thresholds in variables makes monitoring logic easier to configure and maintain.
+- A normalized load of 1.0 means the load average equals the logical CPU count.
+- A normalized load threshold is not a CPU utilization percentage threshold.
+- Assigning a threshold variable alone does not change terminal output or alert behavior.
+- The threshold of 1.0 is a learning example, not a universal production recommendation.
+
+**Engineering takeaway:** Separating configuration values from conditional logic makes monitoring systems easier to maintain and adapt.
+
+**Project status:** Defining a configurable normalized load threshold before implementing real load-based alerts.
+
+## Learning Note 047 — Comparing Normalized Load Against a Threshold
+
+**Objective:** Practice comparing a normalized load measurement against a configurable threshold.
+
+**Command:**
+```bash
+python3 -c "print(0.5 >= 1.0)"
+```
+
+**Concepts:**
+- `>=` means greater than or equal to.
+- Python comparison expressions evaluate to Boolean values: True or False.
+- Floating-point values can be compared using comparison operators.
+- A threshold is a reference value for evaluating system measurements.
+- Storing thresholds in variables improves configurability and maintainability.
+- Normalized load is not the same as CPU utilization percentage.
+
+**Engineering takeaway:** Monitoring alerts depend on comparing measured values against clearly defined thresholds.
+
+**Project status:** Practicing normalized-load comparisons before integrating real load-based alerting into monitor.py.
