@@ -1164,3 +1164,37 @@ else:
 **Engineering takeaway:** Verify alerting behavior through controlled tests rather than assuming a condition works.
 
 **Project status:** Testing the real load-warning branch before restoring the configured threshold.
+
+## Learning Note 050 — Restoring Monitoring Configuration
+
+**Objective:** Restore the original normalized-load threshold after testing the warning branch.
+
+**Temporary test configuration:**
+```python
+load_threshold = 0.0
+```
+
+**Restored configuration:**
+```python
+load_threshold = 1.0
+```
+
+**Existing condition:**
+```python
+if normalized_load >= load_threshold:
+    print("LOAD WARNING")
+else:
+    print("LOAD HEALTHY")
+```
+
+**Concepts:**
+- Temporary test configurations should be restored after testing.
+- A threshold of 0.0 was used to exercise the warning branch.
+- A threshold of 1.0 is our current learning configuration, not a universal production recommendation.
+- The warning condition is True when normalized load meets or exceeds the threshold.
+- Restoring a threshold prevents unnecessary alerts caused by test settings.
+- Monitoring changes should be followed by execution and verification.
+
+**Engineering takeaway:** Controlled testing includes returning the system to its intended configuration and verifying the result.
+
+**Project status:** Restoring normal load-alert behavior after successfully testing both warning and healthy branches.
