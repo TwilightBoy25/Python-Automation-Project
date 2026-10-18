@@ -1232,3 +1232,25 @@ else:
 **Engineering takeaway:** Controlled testing includes returning the system to its intended configuration and verifying the result.
 
 **Project status:** Restoring normal load-alert behavior after successfully testing both warning and healthy branches.
+
+## Learning Note 052 — Using Python Fallback Values
+
+**Objective:** Understand how Python's `or` operator can provide a fallback value when the original value is None.
+
+**Command:**
+```bash
+python3 -c "cpu_count = None or 1; print(cpu_count)"
+```
+
+**Concepts:**
+- `None` represents the absence of a value.
+- `None` is falsy in Python.
+- The `or` operator returns the first truthy operand, or the final operand if all are falsy.
+- `None or 1` evaluates to 1.
+- `8 or 1` evaluates to 8.
+- Fallback values can prevent some failures caused by missing system information.
+- A fallback does not guarantee the measurement is accurate; production monitoring should identify detection failures.
+
+**Engineering takeaway:** Defensive programming anticipates missing values and handles them intentionally instead of allowing avoidable exceptions.
+
+**Project status:** Learning fallback-value behavior before applying it to CPU-count detection.
