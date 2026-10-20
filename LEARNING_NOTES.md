@@ -1254,3 +1254,134 @@ python3 -c "cpu_count = None or 1; print(cpu_count)"
 **Engineering takeaway:** Defensive programming anticipates missing values and handles them intentionally instead of allowing avoidable exceptions.
 
 **Project status:** Learning fallback-value behavior before applying it to CPU-count detection.
+
+## Learning Note 053 — Adding a CPU Count Fallback
+
+**Objective:** Make CPU-count detection more resilient to missing values.
+
+**Previous code:**
+```python
+cpu_count = os.cpu_count()
+```
+
+**Updated code:**
+```python
+cpu_count = os.cpu_count() or 1
+```
+
+**Concepts:**
+- `os.cpu_count()` normally returns the system's logical CPU count.
+- It may return None if CPU count cannot be determined.
+- Python's `or` operator selects a fallback when the first operand is falsy.
+- `8 or 1` evaluates to 8.
+- `None or 1` evaluates to 1.
+- The fallback prevents division by None or zero in this calculation.
+- A fallback CPU count may produce misleading normalized load if actual CPU detection fails.
+
+**Engineering takeaway:** Defensive programming helps prevent unexpected values from terminating monitoring scripts, but fallback measurements should be identified in production systems.
+
+**Project status:** Adding basic defensive CPU-count handling to the Linux Server Health Monitor.
+
+## Learning Note 054 — Inspecting Python Source Code
+
+**Objective:** Inspect the current structure of the Linux Server Health Monitor before making additional changes.
+
+**Command:**
+```bash
+cat -n monitor.py
+```
+
+**Concepts:**
+- `cat` displays the contents of a file.
+- The `-n` option adds line numbers to the displayed output.
+- Reading source code does not execute the Python program.
+- Variables must be assigned before their values are used during normal sequential execution.
+- The CPU-count fallback should be defined before normalized load is calculated.
+- Source-code inspection helps verify the placement of monitoring logic and identify potential problems.
+
+**Engineering takeaway:** Inspect and understand existing code before modifying it, especially when improving reliability.
+
+**Project status:** Reviewing the monitor's current structure before adding further defensive programming improvements.
+
+## Learning Note 055 — Finding Variable Assignments with grep
+
+**Objective:** Inspect monitor.py for duplicate CPU-count assignments without modifying the source file.
+
+**Command:**
+```bash
+grep -n 'cpu_count =' ~/projects/server-health-monitor/monitor.py
+```
+
+**Concepts:**
+- `grep` searches text for matching patterns.
+- The `-n` option displays matching line numbers.
+- Searching source code helps locate specific statements quickly.
+- Assigning the same variable twice can make an earlier assignment unnecessary.
+- `cpu_count = os.cpu_count() or 1` provides a fallback when the detected CPU count is falsy.
+- Source-code inspection should happen before making corrective changes.
+
+**Engineering takeaway:** Use targeted searches to investigate possible code issues rather than editing based on assumptions.
+
+**Project status:** Verifying whether CPU-count detection contains a redundant assignment.
+
+## Learning Note 056 — Verifying Variable Names
+
+**Objective:** Verify that the normalized-load variable is spelled correctly in monitor.py.
+
+**Command:**
+```bash
+grep -n 'load_average / cpu_count' ~/projects/server-health-monitor/monitor.py
+```
+
+**Concepts:**
+- Python variable names must be spelled consistently.
+- `normalized_load` and `nromalized_load` are different identifiers.
+- A misspelled variable can cause a NameError if the program later references an undefined identifier.
+- `grep -n` identifies matching source lines and their line numbers.
+- Source-code inspection helps verify code without changing or executing it.
+
+**Engineering takeaway:** Consistent variable naming reduces bugs and makes automation code easier to maintain.
+
+**Project status:** Verifying the normalized-load calculation before continuing reliability improvements.
+
+## Learning Note 057 — Understanding Fallback Accuracy
+
+**Objective:** Investigate how a fallback CPU count affects normalized-load calculations.
+
+**Command:**
+```bash
+python3 -c "print(0.8 / 1)"
+```
+
+**Concepts:**
+- Fallback values can prevent errors without guaranteeing accurate measurements.
+- `os.cpu_count() or 1` uses 1 if CPU detection returns a falsy value.
+- Dividing load average by an incorrect CPU count can distort normalized load.
+- A system with eight logical CPUs should normally use eight for this calculation.
+- Production monitoring should distinguish valid measurements from fallback estimates.
+
+**Engineering takeaway:** Reliability requires both safe execution and trustworthy monitoring data.
+
+**Project status:** Investigating the accuracy implications of defensive fallback values.
+
+## Learning Note 058 — Detecting Missing Values with is None
+
+**Objective:** Learn to detect missing Python values before applying fallback logic.
+
+**Command:**
+```bash
+python3 -c "cpu_count = None; print(cpu_count is None)"
+```
+
+**Concepts:**
+- `None` represents the absence of a value.
+- `is` checks object identity.
+- `cpu_count is None` checks whether cpu_count refers to None.
+- `=` assigns a value; `is` checks identity.
+- `is None` is the standard Python idiom for detecting None.
+- Unlike a general falsy check, `is None` does not treat zero as missing.
+- Explicit detection can help monitoring software distinguish unavailable measurements from valid measurements.
+
+**Engineering takeaway:** Reliable monitoring should identify missing system information rather than silently hiding detection failures behind fallback values.
+
+**Project status:** Learning explicit missing-value detection before improving CPU-count error reporting.
