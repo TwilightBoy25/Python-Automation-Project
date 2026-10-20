@@ -1385,3 +1385,24 @@ python3 -c "cpu_count = None; print(cpu_count is None)"
 **Engineering takeaway:** Reliable monitoring should identify missing system information rather than silently hiding detection failures behind fallback values.
 
 **Project status:** Learning explicit missing-value detection before improving CPU-count error reporting.
+
+## Learning Note 059 — Testing Valid CPU Detection
+
+**Objective:** Verify that Python does not identify a valid CPU count as a missing value.
+
+**Command:**
+```bash
+python3 -c "cpu_count = 8; print(cpu_count is None)"
+```
+
+**Concepts:**
+- `is None` checks whether a variable refers to the None object.
+- A valid integer CPU count is not None.
+- `8 is None` evaluates to False.
+- Monitoring validation should distinguish missing information from available information.
+- Testing both True and False outcomes helps verify conditional logic.
+- Detecting missing values is only the first step; the program must still decide how to handle them.
+
+**Engineering takeaway:** Reliable validation must recognize both invalid and valid inputs correctly.
+
+**Project status:** Testing both outcomes of missing-value detection before integrating explicit CPU-count validation into monitor.py.
