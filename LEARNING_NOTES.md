@@ -1406,3 +1406,46 @@ python3 -c "cpu_count = 8; print(cpu_count is None)"
 **Engineering takeaway:** Reliable validation must recognize both invalid and valid inputs correctly.
 
 **Project status:** Testing both outcomes of missing-value detection before integrating explicit CPU-count validation into monitor.py.
+
+## Entry 060 — Reliable CPU Detection and Validation
+
+### Objective
+Improve the reliability of the Linux Server Health Monitor by validating CPU detection before using the result in normalized-load calculations.
+
+### Problem
+os.cpu_count() can return None when the CPU count cannot be determined. Using that result directly in division can cause a TypeError. Immediately substituting a fallback value can hide the detection failure.
+
+### Implementation
+```python
+detected_cpu_count = os.cpu_count()
+
+if detected_cpu_count is None or detected_cpu_count <= 0:
+    print("CPU detection FAILED")
+    cpu_count = 1
+else:
+    print("CPU detection VALID")
+    cpu_count = detected_cpu_count
+
+normalized_load = load_average / cpu_count
+```
+
+### Testing
+- Detected count 8: valid branch, effective count 8 — reported passed.
+- Detected count 0: failure branch, fallback count 1 — reported passed.
+- Detected count None: failure branch, fallback count 1 — reported passed.
+- Restoring os.cpu_count() after testing is required for normal operation.
+
+### Engineering Concepts
+- Defensive programming and input validation
+- Short-circuit Boolean evaluation
+- Control flow and data dependencies
+- Preserving original system measurements
+- Avoiding redundant assignments
+- Testing normal and edge-case inputs
+
+### Design Tradeoff
+Using 1 as a fallback prevents invalid division, but it may produce inaccurate normalized-load measurements. Future improvements should mark fallback-derived metrics as unreliable or unavailable.
+
+### Interview Takeaway
+I implemented explicit CPU-count validation so that the monitoring application can distinguish valid CPU detection from missing or invalid system information. I tested valid, zero, and None values, and ensured downstream calculations use the validated CPU count.
+
